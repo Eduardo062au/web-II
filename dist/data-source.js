@@ -2,14 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppDataSource = void 0;
 require("reflect-metadata");
+require("dotenv/config");
 const typeorm_1 = require("typeorm");
+const dialect = process.env.DB_DIALECT ?? "mysql";
 exports.AppDataSource = new typeorm_1.DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "142122",
-    database: "nodeapi",
+    type: dialect,
+    host: process.env.DB_HOST ?? "localhost",
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
+    username: process.env.DB_USERNAME ?? "root",
+    password: process.env.DB_PASSWORD ?? "",
+    database: process.env.DB_DATABASE ?? "nodeapi",
     synchronize: false,
     logging: true,
     entities: [],
