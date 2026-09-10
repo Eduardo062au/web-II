@@ -1,11 +1,13 @@
 import express, {type Request, type Response } from 'express';
+import dotenv from "dotenv";
+dotenv.config()
 
-//cria aplicaçao
 const app = express();
 
-import login from"./controllers/login";
+import login from "./controllers/login";
 
-// criar rota
+app.use(login);
+
 app.get("/", (req:Request, res:Response)=> {
     res.send("Hello World")
 })
