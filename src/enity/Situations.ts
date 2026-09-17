@@ -6,7 +6,7 @@ export class Situation {
     @PrimaryGeneratedColumn()
     id!: number
 
-    @Column()
+    @Column({unique: true})
     nameSituatuions!: string;
 
     @OneToMany(() => User, (user) => user.situation)

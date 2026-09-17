@@ -4,9 +4,18 @@ dotenv.config()
 
 const app = express();
 
-import login from "./controllers/login";
+//middleware corpo requisiçao
+app.use(express.json());
 
-app.use(login);
+import AuthController from"./controllers/AuthController";
+
+import login from "./controllers/AuthController";
+
+import  SituationsController  from './controllers/SituationsController ';
+
+app.use('/', AuthController);
+app.use('/', SituationsController);
+
 
 app.get("/", (req:Request, res:Response)=> {
     res.send("Hello World")
