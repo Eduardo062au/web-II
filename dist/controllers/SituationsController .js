@@ -15,12 +15,21 @@ router.get("/situations", (req, res) => {
     res.send("Bem-Vindo Pessoal, tela situations!");
 });
 //Criar a rota Post principal
-router.post("/situations", (req, res) => {
+router.post("/situations", async (req, res) => {
     try {
         var data = req.body;
-        const newSituationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const newSituation = situationRepositoty.create(data);
+        await situationRepositoty.save(newSituation);
+        res.status(201).json({
+            message: "Situação cadastrada com sucesso",
+            situation: newSituation,
+        });
     }
     catch (error) {
+        res.status(500).json({
+            message: "Erro"
+        });
     }
 });
 //Exportar a instrução da rota

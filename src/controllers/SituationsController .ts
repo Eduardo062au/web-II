@@ -9,11 +9,37 @@ console.log("🔍 login.ts foi carregado!");
 const router = express.Router();
 
 
-//Criar a rota GET principal
-router.get("/situations",(req:Request, res:Response)=>{
-    res.send("Bem-Vindo Pessoal, tela situations!")
-});
+//Criar LISTA
+router.get("/situations",async(req:Request, res:Response)=>{
+    try{
+      const situationRepositoty = AppDataSource.getRepository(Situation);  
+      const situations = await situationRepositoty.find();
+        res.status(200).json(situations);
+        return
 
+    }catch(error){
+        res.status(200).json({
+            messagem : "Erro ao cadastrar situação!",
+        });
+        return
+    }
+});
+//Criar VIEW
+router.get("/situations/:id",async(req:Request, res:Response)=>{
+    try{
+        const { id } = req.params;
+      const situationRepositoty = AppDataSource.getRepository(Situation);  
+      const situations = await situationRepositoty.findOneBy({id : parseInt(id)})
+        res.status(200).json(situations);
+        return
+
+    }catch(error){
+        res.status(200).json({
+            messagem : "Erro ao cadastrar situação!",
+        });
+        return
+    }
+});
 //Criar a rota Post principal
 router.post("/situations",async(req:Request, res:Response)=>{
 
