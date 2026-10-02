@@ -7,25 +7,30 @@ export class CreateSituationsTable1789082945049 implements MigrationInterface {
 
             name:"situations",
             columns: [
-                {
-                    name: "id",
-                    type: "int",
-                    isPrimary: true,
-                    isGenerated: true,
-                    generationStrategy: "increment"
-                },
-                {
-                    name: "nameSituatuions",
-                    type: "varchar",
-                    isUnique: true,
-                },
-                {
-                    name: "createAt",
-                    type: "timestamp",
-                    default: "CURRENT_TIMESTAMP",
-                    onUpdate: "CURRENT_TIMESTAMP"
-                }
-            ] 
+    {
+        name: "id",
+        type: "int",
+        isPrimary: true,
+        isGenerated: true,
+        generationStrategy: "increment"
+    },
+    {
+        name: "nameSituatuions",
+        type: "varchar",
+        isUnique: true,
+    },
+    {
+        name: "createAt",
+        type: "timestamp",
+        default: "CURRENT_TIMESTAMP",
+    },
+    {
+        name: "updateAt",
+        type: "timestamp",
+        default: "CURRENT_TIMESTAMP",
+        onUpdate: "CURRENT_TIMESTAMP"
+    }
+] 
         }))
 
     }

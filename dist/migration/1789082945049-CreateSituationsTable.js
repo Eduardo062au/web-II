@@ -23,6 +23,11 @@ class CreateSituationsTable1789082945049 {
                     name: "createAt",
                     type: "timestamp",
                     default: "CURRENT_TIMESTAMP",
+                },
+                {
+                    name: "updateAt",
+                    type: "timestamp",
+                    default: "CURRENT_TIMESTAMP",
                     onUpdate: "CURRENT_TIMESTAMP"
                 }
             ]
