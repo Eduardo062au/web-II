@@ -1,26 +1,22 @@
-import express, {type Request, type Response } from 'express';
+
+import express from "express";
 import dotenv from "dotenv";
-dotenv.config()
+dotenv.config();
 
 const app = express();
 
-//middleware corpo requisiçao
+// Middleware para receber requisições no formato JSON
 app.use(express.json());
 
-import AuthController from"./controllers/AuthController";
-
-import login from "./controllers/AuthController";
-
-import  SituationsController  from './controllers/SituationsController ';
-
-app.use('/', AuthController);
-app.use('/', SituationsController);
+// Importando os controladores das rotas
+import AuthController from "./controllers/AuthController";
+import SituationsController from "./controllers/SituationsController";
+// Rotas da aplicação
+app.use("/", AuthController);
+app.use("/", SituationsController);
 
 
-app.get("/", (req:Request, res:Response)=> {
-    res.send("Hello World")
-})
-
-app.listen(8080, ()=>{
-    console.log("Servidor Iniciando na porta 8080: http://localhost:8080")
+// Iniciando o servidor na porta definida no arquivo .env
+app.listen(process.env.PORT, () => {
+    console.log("Servidor Iniciando na porta 8080: http://localhost:8080");
 });

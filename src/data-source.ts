@@ -9,7 +9,7 @@ dotenv.config()
 
     const dialect = process.env.DB_DIALECT ?? "mysql"
 
-
+// Configuração do DataSource do TypeORM
 export const AppDataSource = new DataSource({
     type: dialect as "mysql" | "mariadb" | "postgres",
     host: process.env.DB_HOST ?? "localhost",
@@ -24,6 +24,7 @@ export const AppDataSource = new DataSource({
     migrations: [__dirname + "/migration/*.js"],
 });
 
+// Inicialização do DataSource do TypeORM
 AppDataSource.initialize().then(()=>{
     console.log("Conexão com banco bem sucedida.")
    }) .catch((error)=>{

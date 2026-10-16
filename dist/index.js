@@ -7,16 +7,16 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-//middleware corpo requisiçao
+// Middleware para receber requisições no formato JSON
 app.use(express_1.default.json());
+// Importando os controladores das rotas
 const AuthController_1 = __importDefault(require("./controllers/AuthController"));
-const SituationsController_1 = __importDefault(require("./controllers/SituationsController "));
-app.use('/', AuthController_1.default);
-app.use('/', SituationsController_1.default);
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
-app.listen(8080, () => {
+const SituationsController_1 = __importDefault(require("./controllers/SituationsController"));
+// Rotas da aplicação
+app.use("/", AuthController_1.default);
+app.use("/", SituationsController_1.default);
+// Iniciando o servidor na porta definida no arquivo .env
+app.listen(process.env.PORT, () => {
     console.log("Servidor Iniciando na porta 8080: http://localhost:8080");
 });
 //# sourceMappingURL=index.js.map
