@@ -1,4 +1,7 @@
 import { AppDataSource } from "./data-source";
+import CreateProductCategoriesSeeds from "./seeds/CreateProductCategoriesSeeds";
+import CreateProductSituationsSeeds from "./seeds/CreateProductSituationsSeeds";
+import CreateProductsSeeds from "./seeds/CreateProductsSeeds";
 import CreateSituationsSeeds from "./seeds/CreateSituationsSeeds";
 
 const runSeeds = async() =>{
@@ -17,6 +20,14 @@ const runSeeds = async() =>{
         //run para criar as seeds
         await situationSeeds.run(AppDataSource);
 
+        const productCategoriesSeeds = new CreateProductCategoriesSeeds();
+        await productCategoriesSeeds.run(AppDataSource);
+
+        const productSituationsSeeds = new CreateProductSituationsSeeds();
+        await productSituationsSeeds.run(AppDataSource);
+
+        const productsSeeds = new CreateProductsSeeds();
+        await productsSeeds.run(AppDataSource);        
 
     } catch (error) {
 

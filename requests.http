@@ -1,0 +1,149 @@
+@baseUrl = http://localhost:8080
+
+### ----------------------------------------------------
+### 1. BOAS VINDAS
+### ----------------------------------------------------
+GET {{baseUrl}}/a
+
+### ----------------------------------------------------
+### 2. SITUAÇÕES DE USUÁRIOS (Situations)
+### ----------------------------------------------------
+### Listar Situações
+GET {{baseUrl}}/situations?page=1&limit=10
+
+### Buscar Situação por ID
+GET {{baseUrl}}/situations/1
+
+### Cadastrar Situação
+POST {{baseUrl}}/situations
+Content-Type: application/json
+
+{
+  "nameSituatuions": "Ativo"
+}
+
+### Editar Situação
+PUT {{baseUrl}}/situations/1
+Content-Type: application/json
+
+{
+  "nameSituatuions": "Inativo"
+}
+
+### Excluir Situação
+DELETE {{baseUrl}}/situations/1
+
+### ----------------------------------------------------
+### 3. PRODUTOS (Products)
+### ----------------------------------------------------
+### Listar Produtos
+GET {{baseUrl}}/products?page=1&limit=10
+
+### Buscar Produto por ID
+GET {{baseUrl}}/products/5
+
+### Cadastrar Produto
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Notebook Dell"
+}
+
+### Editar Produto
+PUT {{baseUrl}}/products/5
+Content-Type: application/json
+
+{
+  "name": "Notebook Dell Inspiron"
+}
+
+### Excluir Produto
+DELETE {{baseUrl}}/products/5
+
+### ----------------------------------------------------
+### 4. CATEGORIAS DE PRODUTOS (Product Categories)
+### ----------------------------------------------------
+### Listar Categorias
+GET {{baseUrl}}/product-categories?page=1&limit=10
+
+### Buscar Categoria por ID
+GET {{baseUrl}}/product-categories/1
+
+### Cadastrar Categoria
+POST {{baseUrl}}/product-categories
+Content-Type: application/json
+
+{
+  "name": "Eletrônicos"
+}
+
+### Editar Categoria
+PUT {{baseUrl}}/product-categories/1
+Content-Type: application/json
+
+{
+  "name": "Informática e Eletrônicos"
+}
+
+### Excluir Categoria
+DELETE {{baseUrl}}/product-categories/1
+
+### ----------------------------------------------------
+### 5. SITUAÇÕES DE PRODUTOS (Product Situations)
+### ----------------------------------------------------
+### Listar Situações de Produtos
+GET {{baseUrl}}/product-situations?page=1&limit=10
+
+### Buscar Situação de Produto por ID
+GET {{baseUrl}}/product-situations/1
+
+### Cadastrar Situação de Produto
+POST {{baseUrl}}/product-situations
+Content-Type: application/json
+
+{
+  "name": "Disponível"
+}
+
+### Editar Situação de Produto
+PUT {{baseUrl}}/product-situations/1
+Content-Type: application/json
+
+{
+  "name": "Em Estoque"
+}
+
+### Excluir Situação de Produto
+DELETE {{baseUrl}}/product-situations/1
+
+### ----------------------------------------------------
+### 6. USUÁRIOS (Users)
+### ----------------------------------------------------
+### Listar Usuários
+GET {{baseUrl}}/users?page=1&limit=10
+
+### Buscar Usuário por ID
+GET {{baseUrl}}/users/1
+
+### Cadastrar Usuário
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "situationId": 1
+}
+
+### Editar Usuário
+PUT {{baseUrl}}/users/1
+Content-Type: application/json
+
+{
+  "name": "João Silva Santos",
+  "email": "joao.santos@email.com"
+}
+
+### Excluir Usuário
+DELETE {{baseUrl}}/users/1

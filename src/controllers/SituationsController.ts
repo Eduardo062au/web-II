@@ -55,8 +55,9 @@ router.get("/situations/:id", async (req: Request, res: Response) => {
         res.status(200).json(situation);
         return;
     } catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no GET /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao buscar situação!",
         });
         return;
     }
@@ -67,6 +68,8 @@ router.put("/situations/:id", async (req: Request, res: Response) => {
     try {
         const id = Number(req.params.id);
         var data = req.body;
+        console.log("🔍 PUT /situations/:id id=", id, " body=", data);
+
         const situationRepositoty = AppDataSource.getRepository(Situation);
         const situation = await situationRepositoty.findOneBy({ id });
 
@@ -79,8 +82,11 @@ router.put("/situations/:id", async (req: Request, res: Response) => {
 
         //Atualiza os dados
         situationRepositoty.merge(situation, data);
+        console.log("🔍 Situation após merge:", situation);
+
         //Salvar as alterações de dados
-        const updateSituation =await situationRepositoty.save(situation)
+        const updateSituation = await situationRepositoty.save(situation);
+        console.log("🔍 Situation salva:", updateSituation);
 
         res.status(200).json({
             message: "Situação atualizada com sucesso",
@@ -89,8 +95,9 @@ router.put("/situations/:id", async (req: Request, res: Response) => {
 
 
     } catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no PUT /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação!",
         });
         return;
     }
@@ -111,8 +118,9 @@ router.post("/situations", async (req: Request, res: Response) => {
             situation: newSituation,
         });
     } catch (error) {
+        console.error("Erro no POST /situations:", error);
         res.status(500).json({
-            message: "Erro ao atualizar situação",
+            message: "Erro ao cadastrar situação",
         });
     }
 });
@@ -136,13 +144,14 @@ router.delete("/situations/:id", async (req: Request, res: Response) => {
 
 
         res.status(200).json({
-            message: "Situação atualizada com sucesso",
+            message: "Situação excluída com sucesso",
         });
 
 
     } catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no DELETE /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao excluir situação!",
         });
         return;
     }

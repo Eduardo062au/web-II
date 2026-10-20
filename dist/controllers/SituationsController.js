@@ -7,20 +7,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const data_source_1 = require("../data-source");
 const Situations_1 = require("../enity/Situations");
+const PaginationServices_1 = require("../services/PaginationServices");
 console.log("🔍 login.ts foi carregado!");
 // Criar a Aplicação Express
 const router = express_1.default.Router();
-//Criar LISTA
+//Criar Lista
 router.get("/situations", async (req, res) => {
     try {
-        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
-        const situations = await situationRepositoty.find();
-        res.status(200).json(situations);
+        // Buscar todas as situações no banco de dados
+        const situationRepository = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        //receber o numero da pagina e definir pagina 1 como padrão
+        const page = Number(req.query.page) || 1;
+        // Definir o limite de registros por página
+        const limite = Number(req.query.limit) || 10;
+        // Chamar o serviço de paginação para obter os dados paginados
+        const result = await PaginationServices_1.PaginationServices.paginate(situationRepository, page, limite, { id: "DESC" });
+        //retornar a resposta com os ados e informações de paginação
+        res.status(200).json(result);
         return;
     }
     catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        res.status(500).json({
+            message: "Erro ao buscar situações!",
         });
         return;
     }
@@ -41,8 +49,9 @@ router.get("/situations/:id", async (req, res) => {
         return;
     }
     catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no GET /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao buscar situação!",
         });
         return;
     }
@@ -52,6 +61,7 @@ router.put("/situations/:id", async (req, res) => {
     try {
         const id = Number(req.params.id);
         var data = req.body;
+        console.log("🔍 PUT /situations/:id id=", id, " body=", data);
         const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
         const situation = await situationRepositoty.findOneBy({ id });
         if (!situation) {
@@ -62,16 +72,19 @@ router.put("/situations/:id", async (req, res) => {
         }
         //Atualiza os dados
         situationRepositoty.merge(situation, data);
+        console.log("🔍 Situation após merge:", situation);
         //Salvar as alterações de dados
         const updateSituation = await situationRepositoty.save(situation);
+        console.log("🔍 Situation salva:", updateSituation);
         res.status(200).json({
             message: "Situação atualizada com sucesso",
             situation: updateSituation,
         });
     }
     catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no PUT /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao atualizar situação!",
         });
         return;
     }
@@ -89,8 +102,9 @@ router.post("/situations", async (req, res) => {
         });
     }
     catch (error) {
+        console.error("Erro no POST /situations:", error);
         res.status(500).json({
-            message: "Erro ao atualizar situação",
+            message: "Erro ao cadastrar situação",
         });
     }
 });
@@ -109,12 +123,13 @@ router.delete("/situations/:id", async (req, res) => {
         //Remover os dados do banco
         await situationRepositoty.remove(situation);
         res.status(200).json({
-            message: "Situação atualizada com sucesso",
+            message: "Situação excluída com sucesso",
         });
     }
     catch (error) {
-        res.status(200).json({
-            messagem: "Erro ao cadastrar situação!",
+        console.error("Erro no DELETE /situations/:id:", error);
+        res.status(500).json({
+            messagem: "Erro ao excluir situação!",
         });
         return;
     }

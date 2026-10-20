@@ -1,0 +1,316 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "Web II API",
+    "description": "Coleção de requisições Postman para a API do projeto Web II (Express + TypeORM).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth / Geral",
+      "item": [
+        {
+          "name": "Rota Inicial (Boas-Vindas)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/a",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "a"
+              ]
+            },
+            "description": "Retorna mensagem de boas-vindas."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Situações (Situations)",
+      "item": [
+        {
+          "name": "Listar Situações (Paginado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/situations?page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "situations"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da página"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de registros por página"
+                }
+              ]
+            },
+            "description": "Retorna a lista paginada de situações."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Situação por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/situations/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "situations",
+                "1"
+              ]
+            },
+            "description": "Busca os detalhes de uma situação específica pelo ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Situação",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameSituatuions\": \"Ativo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/situations",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "situations"
+              ]
+            },
+            "description": "Cadastra uma nova situação."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Situação",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nameSituatuions\": \"Inativo\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/situations/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "situations",
+                "1"
+              ]
+            },
+            "description": "Atualiza uma situação existente pelo ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir Situação",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/situations/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "situations",
+                "1"
+              ]
+            },
+            "description": "Remove uma situação pelo ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Produtos (Products)",
+      "item": [
+        {
+          "name": "Listar Produtos (Paginado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?page=1&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Número da página"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Quantidade de registros por página"
+                }
+              ]
+            },
+            "description": "Retorna a lista paginada de produtos."
+          },
+          "response": []
+        },
+        {
+          "name": "Buscar Produto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            },
+            "description": "Busca os detalhes de um produto específico pelo ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Cadastrar Produto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Produto Exemplo\",\n  \"price\": 99.90\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            },
+            "description": "Cadastra um novo produto."
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Produto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Produto Atualizado\",\n  \"price\": 149.90\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            },
+            "description": "Atualiza um produto existente pelo ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Excluir Produto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            },
+            "description": "Remove um produto pelo ID."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
