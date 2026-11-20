@@ -1,15 +1,46 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-//Importar a biblioteca Express
 const express_1 = __importDefault(require("express"));
 const data_source_1 = require("../data-source");
 const Situations_1 = require("../enity/Situations");
 const PaginationServices_1 = require("../services/PaginationServices");
-console.log("🔍 login.ts foi carregado!");
-// Criar a Aplicação Express
+const yup = __importStar(require("yup"));
 const router = express_1.default.Router();
 //Criar Lista
 router.get("/situations", async (req, res) => {
@@ -33,15 +64,15 @@ router.get("/situations", async (req, res) => {
         return;
     }
 });
-//Criar VIEW
+//Rota GET para visualizar uma situação específica
 router.get("/situations/:id", async (req, res) => {
     try {
-        const id = Number(req.params.id);
-        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
-        const situation = await situationRepositoty.findOneBy({ id });
+        const { id } = req.params;
+        const situationRepository = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const situation = await situationRepository.findOneBy({ id: parseInt(id) });
         if (!situation) {
             res.status(404).json({
-                messagem: "Situação não encontrada!",
+                message: "Situação não encontrada!",
             });
             return;
         }
@@ -49,91 +80,108 @@ router.get("/situations/:id", async (req, res) => {
         return;
     }
     catch (error) {
-        console.error("Erro no GET /situations/:id:", error);
         res.status(500).json({
-            messagem: "Erro ao buscar situação!",
+            message: "Erro ao buscar situação!",
         });
         return;
     }
 });
-//Criar EDIT
-router.put("/situations/:id", async (req, res) => {
-    try {
-        const id = Number(req.params.id);
-        var data = req.body;
-        console.log("🔍 PUT /situations/:id id=", id, " body=", data);
-        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
-        const situation = await situationRepositoty.findOneBy({ id });
-        if (!situation) {
-            res.status(404).json({
-                messagem: "Situação não encontrada!",
-            });
-            return;
-        }
-        //Atualiza os dados
-        situationRepositoty.merge(situation, data);
-        console.log("🔍 Situation após merge:", situation);
-        //Salvar as alterações de dados
-        const updateSituation = await situationRepositoty.save(situation);
-        console.log("🔍 Situation salva:", updateSituation);
-        res.status(200).json({
-            message: "Situação atualizada com sucesso",
-            situation: updateSituation,
-        });
-    }
-    catch (error) {
-        console.error("Erro no PUT /situations/:id:", error);
-        res.status(500).json({
-            messagem: "Erro ao atualizar situação!",
-        });
-        return;
-    }
-});
-//Criar a rota Post principal
+//Rota POST
 router.post("/situations", async (req, res) => {
     try {
         var data = req.body;
-        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
-        const newSituation = situationRepositoty.create(data);
-        await situationRepositoty.save(newSituation);
+        const schema = yup.object().shape({
+            nameSituation: yup.string()
+                .required("O nome da situação é obrigatório!")
+                .min(3, "O nome da situação deve ter no mínimo 3 caracteres!")
+        });
+        await schema.validate(data, { abortEarly: false });
+        const situationRepository = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const newSituation = situationRepository.create(data);
+        await situationRepository.save(newSituation);
         res.status(201).json({
-            message: "Situação cadastrada com sucesso",
-            situation: newSituation,
+            message: "Situação criada com sucesso!",
+            Situation: newSituation,
         });
     }
     catch (error) {
-        console.error("Erro no POST /situations:", error);
-        res.status(500).json({
-            message: "Erro ao cadastrar situação",
-        });
-    }
-});
-// Remove o item cadastrado no banco
-router.delete("/situations/:id", async (req, res) => {
-    try {
-        const id = Number(req.params.id);
-        const situationRepositoty = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
-        const situation = await situationRepositoty.findOneBy({ id });
-        if (!situation) {
-            res.status(404).json({
-                messagem: "Situação não encontrada!",
+        if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                message: error.errors,
             });
             return;
         }
-        //Remover os dados do banco
-        await situationRepositoty.remove(situation);
-        res.status(200).json({
-            message: "Situação excluída com sucesso",
+        res.status(500).json({
+            message: "Erro ao criar situação!",
         });
     }
+});
+//Rota PUT Atualizar uma situação específica
+router.put("/situations/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        var data = req.body;
+        const schema = yup.object().shape({
+            nameSituation: yup.string()
+                .required("O nome da situação é obrigatório!")
+                .min(3, "O nome da situação deve ter no mínimo 3 caracteres!")
+        });
+        await schema.validate(data, { abortEarly: false });
+        const situationRepository = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const situation = await situationRepository.findOneBy({ id: parseInt(id) });
+        if (!situation) {
+            res.status(404).json({
+                message: "Situação não encontrada!",
+            });
+            return;
+        }
+        //Atualizar os dados da situação com os novos valores
+        situationRepository.merge(situation, data);
+        // Salvar as alterações no banco de dados
+        const updatedSituation = await situationRepository.save(situation);
+        res.status(200).json({
+            message: "Situação atualizada com sucesso!",
+            Situation: updatedSituation,
+        });
+        return;
+    }
     catch (error) {
-        console.error("Erro no DELETE /situations/:id:", error);
+        if (error instanceof yup.ValidationError) {
+            res.status(400).json({
+                message: error.errors,
+            });
+            return;
+        }
         res.status(500).json({
-            messagem: "Erro ao excluir situação!",
+            message: "Erro ao atualizar situação!",
+        });
+    }
+});
+//Rota DELETE uma situação específica
+router.delete("/situations/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const situationRepository = data_source_1.AppDataSource.getRepository(Situations_1.Situation);
+        const situation = await situationRepository.findOneBy({ id: parseInt(id) });
+        if (!situation) {
+            res.status(404).json({
+                message: "Situação não encontrada!",
+            });
+            return;
+        }
+        // Excluir a situação
+        await situationRepository.remove(situation);
+        res.status(200).json({
+            message: "Situação excluída com sucesso!",
+        });
+        return;
+    }
+    catch (error) {
+        res.status(500).json({
+            message: "Erro ao excluir situação!",
         });
         return;
     }
 });
-//Exportar a instrução da rota
 exports.default = router;
 //# sourceMappingURL=SituationsController.js.map

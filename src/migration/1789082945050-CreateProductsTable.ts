@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class CreateProductsTable1788470014200 implements MigrationInterface {
+export class CreateUsersTable1788470013083 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(new Table({
-            name: "products",
+            name: "users",
             columns: [
                 {
                     name: "id",
@@ -16,10 +16,11 @@ export class CreateProductsTable1788470014200 implements MigrationInterface {
                     name: "name",
                     type: "varchar"
                 }, {
-                    name: "productSituationId",
-                    type: "int"
+                    name: "email",
+                    type: "varchar",
+                    isUnique: true
                 }, {
-                    name: "productCategoryId",
+                    name: "situationId",
                     type: "int"
                 }, {
                     name: "createdAt",
@@ -34,29 +35,25 @@ export class CreateProductsTable1788470014200 implements MigrationInterface {
             ]
         }));
 
-        await queryRunner.createForeignKey("products", new TableForeignKey({
-            columnNames: ["productSituationId"],
+
+        //Criar chama estrangeira para a tabela situations
+
+        await queryRunner.createForeignKey("users", new TableForeignKey({
+            columnNames: ["situationId"],
             referencedColumnNames: ["id"],
-            referencedTableName: "product_situations",
+            referencedTableName: "situations",
             onDelete: "CASCADE"
         }));
 
-        await queryRunner.createForeignKey("products", new TableForeignKey({
-            columnNames: ["productCategoryId"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "product_categories",
-            onDelete: "CASCADE"
-        }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        const table = await queryRunner.getTable("products");
-        if (table) {
-            for (const foreignKey of table.foreignKeys) {
-                await queryRunner.dropForeignKey("products", foreignKey);
-            }
+        const table = await queryRunner.getTable("users");
+        const foreignKey = table!.foreignKeys.find(fk => fk.columnNames.includes("situationId"));
+        if (foreignKey) {
+            await queryRunner.dropForeignKey("users", foreignKey);
         }
-        await queryRunner.dropTable("products");
+        await queryRunner.dropTable("users");
     }
 
 }

@@ -25,12 +25,24 @@ __decorate([
     __metadata("design:type", String)
 ], Product.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => ProductSituations_1.ProductSituation, (productSituation) => productSituation.products, { nullable: true, onDelete: "SET NULL" }),
+    (0, typeorm_1.Column)({ unique: true }),
+    __metadata("design:type", String)
+], Product.prototype, "slug", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "longtext" }),
+    __metadata("design:type", String)
+], Product.prototype, "description", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: "decimal", precision: 10, scale: 2 }),
+    __metadata("design:type", Number)
+], Product.prototype, "price", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => ProductSituations_1.ProductSituation, (productSituation) => productSituation.products),
     (0, typeorm_1.JoinColumn)({ name: "productSituationId" }),
     __metadata("design:type", ProductSituations_1.ProductSituation)
 ], Product.prototype, "productSituation", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => ProductCategories_1.ProductCategory, (productCategory) => productCategory.products, { nullable: true, onDelete: "SET NULL" }),
+    (0, typeorm_1.ManyToOne)(() => ProductCategories_1.ProductCategory, (productCategory) => productCategory.products),
     (0, typeorm_1.JoinColumn)({ name: "productCategoryId" }),
     __metadata("design:type", ProductCategories_1.ProductCategory)
 ], Product.prototype, "productCategory", void 0);

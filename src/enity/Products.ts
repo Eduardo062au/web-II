@@ -11,13 +11,22 @@ export class Product {
     @Column()
     name!: string;
 
-    @ManyToOne(() => ProductSituation, (productSituation) => productSituation.products, { nullable: true, onDelete: "SET NULL" })
-    @JoinColumn({ name: "productSituationId" })
-    productSituation?: ProductSituation;
+    @Column({ unique: true })
+    slug!: string;
 
-    @ManyToOne(() => ProductCategory, (productCategory) => productCategory.products, { nullable: true, onDelete: "SET NULL" })
+    @Column({ type: "longtext" })
+    description!: string;
+
+    @Column({ type: "decimal", precision: 10, scale: 2 })
+    price!: number;
+
+    @ManyToOne(() => ProductSituation, (productSituation) => productSituation.products)
+    @JoinColumn({ name: "productSituationId" })
+    productSituation!: ProductSituation;
+
+    @ManyToOne(() => ProductCategory, (productCategory) => productCategory.products)
     @JoinColumn({ name: "productCategoryId" })
-    productCategory?: ProductCategory;
+    productCategory!: ProductCategory;
 
     @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
     createdAt!: Date;

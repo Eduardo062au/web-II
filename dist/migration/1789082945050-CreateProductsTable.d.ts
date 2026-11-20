@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
-export declare class CreateProductsTable1788470014200 implements MigrationInterface {
+export declare class CreateUsersTable1788470013083 implements MigrationInterface {
     up(queryRunner: QueryRunner): Promise<void>;
     down(queryRunner: QueryRunner): Promise<void>;
 }

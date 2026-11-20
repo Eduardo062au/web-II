@@ -3,8 +3,11 @@ import { ProductSituation } from "./ProductSituations";
 export declare class Product {
     id: number;
     name: string;
-    productSituation?: ProductSituation;
-    productCategory?: ProductCategory;
+    slug: string;
+    description: string;
+    price: number;
+    productSituation: ProductSituation;
+    productCategory: ProductCategory;
     createdAt: Date;
     updatedAt: Date;
 }
